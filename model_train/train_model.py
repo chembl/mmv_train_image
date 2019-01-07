@@ -90,7 +90,7 @@ class MMVModel:
         return sm.tocsc()
     
     def _get_too_few(self, sm):
-        # remove all features that are either one or zero (on or off) in more than 99% of the samples
+        # remove invariante features
         sel = VarianceThreshold()
         sel.fit(sm)
         return sel.get_support()
