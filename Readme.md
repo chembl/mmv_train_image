@@ -5,7 +5,13 @@
 
   https://docs.docker.com/install/
 
-You may need to configure Docker to let it use all available system Memory.
+You may need to configure Docker to let it use all available system Memory if you're under Mac or Windows.
+
+In mac:
+
+<a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/mac1.png" width="300" ></a>
+<a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/mac2.png" width="300" ></a>
+
 
 - Clone the repository, cd into the directory and build the docker image:
 
