@@ -54,7 +54,6 @@ class MMVModel:
     
     fp_type = None
     con_desc_list = []
-    model = None
     trained = False
     
     def __init__(self, fp_type, con_desc_list):
@@ -213,7 +212,7 @@ class MMVModel:
 
 def calc_coverage(fname, fp_type, model):
     df = pd.read_csv(fname)
-    fps_model = set(clf.v_fps.vocabulary_.keys())
+    fps_model = set(model.v_fps.vocabulary_.keys())
     coverage = []
     for s in df['smiles']:
         try:
