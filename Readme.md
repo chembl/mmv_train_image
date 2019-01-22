@@ -23,7 +23,7 @@ In mac:
 
 - Copy train(training_set.csv) and coverage(coverage_set.csv) datasets in model_train folder. Datasets should be formatted like model_train/training_set_sample.csv and model_train/coverage_set_sample.csv files.
 
-- Configure a model in the configuration file(model_train/config.json) if needed. Available descriptors are:
+- Configure a model in the configuration file(model_train/model_configs.json) if needed. Available descriptors are:
 
     - Fingerprints: Select between fcfp or ecfp.
     - Physicochemical: alogp, mw, hba, hbd, rtb, n_h_atoms
