@@ -1,7 +1,7 @@
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors
-from sklearn.metrics import matthews_corrcoef, confusion_matrix
+from sklearn.metrics import matthews_corrcoef, confusion_matrix, f1_score
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.preprocessing import KBinsDiscretizer
@@ -267,6 +267,7 @@ for model_name, conf in model_configs.items():
     report = {}
     roc_auc = roc_auc_score(y1, preds)
     mt = matthews_corrcoef(y1, preds)
+    f1 = f1_score(y1, preds)
     tn, fp, fn, tp = confusion_matrix(y1, preds).ravel()
     sensitivity = tp / (tp + fn)
     specificity = tn / (tn + fp)
@@ -277,6 +278,7 @@ for model_name, conf in model_configs.items():
     report.update({'specificity': specificity})
     report.update({'roc_auc_score': roc_auc})
     report.update({'matthews_corrcoef': mt})
+    report.update({'f1_score': f1})
     report.update({'confusion_matrix': {'tn': tn, 'fp': fp, 'fn': fn, 'tp': tp}})
 
     json_tricks.dump(report, open('report_{}.json'.format(model_name), 'w'), indent=2, sort_keys=True)
