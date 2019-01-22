@@ -1,13 +1,11 @@
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors
-from sklearn.metrics import matthews_corrcoef, confusion_matrix, f1_score
+from sklearn.metrics import matthews_corrcoef, confusion_matrix, f1_score, roc_auc_score
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_extraction import DictVectorizer
-from sklearn.preprocessing import KBinsDiscretizer
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import KBinsDiscretizer, OneHotEncoder
 from sklearn.exceptions import NotFittedError
-from sklearn.metrics import roc_auc_score
 from standardiser import standardise
 from ModifiedNB import ModifiedNB
 from scipy import sparse
