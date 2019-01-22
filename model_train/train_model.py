@@ -1,6 +1,7 @@
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors
+from sklearn.metrics import matthews_corrcoef, confusion_matrix
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.preprocessing import KBinsDiscretizer
@@ -232,23 +233,52 @@ def calc_coverage(fname, fp_type, model):
 tqdm.pandas()
 
 # load config file
-descs = json_tricks.load(open('config.json'))
-fp_type = descs['fp_type'] 
-con_desc_list = descs['con_desc_list']
+model_configs = json_tricks.load(open('model_configs.json'))
 
-# load data and calc descriptors
-X, y = load_data('training_set.csv', fp_type, con_desc_list)
+for model_name, conf in model_configs.items():
+    print()
+    print(model_name)
+    print('---------------------')
 
-# train the model
-clf = MMVModel(fp_type=fp_type, con_desc_list=con_desc_list)
-clf.fit(X, y)
+    fp_type = conf['fp_type'] 
+    con_desc_list = conf['con_desc_list']
 
-# export the model to json
-clf.to_json('model.json')
+    # load data and calc descriptors
+    X, y = load_data('training_set.csv', fp_type, con_desc_list)
 
+    # train the model
+    clf = MMVModel(fp_type=fp_type, con_desc_list=con_desc_list)
+    clf.fit(X, y)
 
-# calc coverage values for all molecules
-coverage = calc_coverage('coverage_set.csv', fp_type, clf)
+    # export the model to json
+    clf.to_json('{}.json'.format(model_name))
 
-print("Coverage value:", sum(coverage) / len(coverage))
-json_tricks.dump(coverage, open('coverage_values.json', 'w'), indent=2, sort_keys=True)
+    # calc coverage values for all molecules
+    coverage = calc_coverage('coverage_set.csv', fp_type, clf)
+    
+    # load eMolecules set and create classification report
+    X1, y1 = load_data('eMolecules.csv', fp_type, con_desc_list)
+    preds = clf.predict(X1)
+
+    pdf = pd.DataFrame(preds)
+    pdf.to_csv('predictions_{}.csv'.format(model_name), index=False)
+
+    report = {}
+    roc_auc = roc_auc_score(y1, preds)
+    mt = matthews_corrcoef(y1, preds)
+    tn, fp, fn, tp = confusion_matrix(y1, preds).ravel()
+    sensitivity = tp / (tp + fn)
+    specificity = tn / (tn + fp)
+    precision = tp / (tp + fp)
+
+    report.update({'precision': precision})
+    report.update({'sensitivity': sensitivity})
+    report.update({'specificity': specificity})
+    report.update({'roc_auc_score': roc_auc})
+    report.update({'matthews_corrcoef': mt})
+    report.update({'confusion_matrix': {'tn': tn, 'fp': fp, 'fn': fn, 'tp': tp}})
+
+    json_tricks.dump(report, open('report_{}.json'.format(model_name), 'w'), indent=2, sort_keys=True)
+
+    print("FP coverage value:", sum(coverage) / len(coverage))
+    json_tricks.dump(coverage, open('coverage_values_{}.json'.format(model_name), 'w'), indent=2, sort_keys=True)
