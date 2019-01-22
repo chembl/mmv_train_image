@@ -57,3 +57,4 @@ dependencies:
   - pip:
     - json-tricks==3.12.2
     - standardiser==0.1.9
+    - modifiednb==0.2

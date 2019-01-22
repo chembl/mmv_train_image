@@ -21,11 +21,6 @@ RUN conda env create -n mmv_train -f /tmp/environment.yml
 # activate env (add conda env bin to path)
 ENV PATH /opt/conda/envs/mmv_train/bin:$PATH
 
-# clone and install modifield naive bayes model
-RUN git clone https://github.com/chembl/ModifiedNB.git /tmp/ModifiedNB
-WORKDIR /tmp/ModifiedNB
-RUN python setup.py install
-
 # run the python script
 WORKDIR /model_train
 CMD python train_model.py
