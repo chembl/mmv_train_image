@@ -261,6 +261,7 @@ for model_name, conf in model_configs.items():
     preds = clf.predict(X1)
 
     pdf = pd.DataFrame(preds)
+    pdf.columns = ['pred']
     pdf.to_csv('predictions_{}.csv'.format(model_name), index=False)
 
     report = {}

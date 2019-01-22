@@ -1,0 +1,44 @@
+{
+  "model1": {
+    "con_desc_list": [],
+    "fp_type": "ecfp",
+    "standardise": true
+  },
+  "model2": {
+    "con_desc_list": [],
+    "fp_type": "fcfp",
+    "standardise": true
+  },
+  "model3": {
+    "con_desc_list": [
+      "alogp",
+      "mw",
+      "rtb",
+      "hba",
+      "hbd"
+    ],
+    "fp_type": "ecfp",
+    "standardise": true
+  },
+  "model4": {
+    "con_desc_list": [
+      "alogp",
+      "mw",
+      "rtb",
+      "hba",
+      "hbd"
+    ],
+    "fp_type": "fcfp",
+    "standardise": true
+  },
+  "model5": {
+    "con_desc_list": [
+      "alogp",
+      "n_h_atoms",
+      "hba",
+      "hbd"
+    ],
+    "fp_type": "fcfp",
+    "standardise": true
+  }
+}
