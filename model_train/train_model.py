@@ -264,7 +264,7 @@ for model_name, conf in model_configs.items():
     pdf.to_csv('predictions_{}.csv'.format(model_name), index=False)
 
     report = {}
-    roc_auc = roc_auc_score(y1, preds)
+    roc_auc = roc_auc_score(y1, clf.predict_proba(X1)[:,1])
     mt = matthews_corrcoef(y1, preds)
     f1 = f1_score(y1, preds)
     tn, fp, fn, tp = confusion_matrix(y1, preds).ravel()
