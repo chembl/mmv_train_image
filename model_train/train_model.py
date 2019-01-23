@@ -240,9 +240,10 @@ for model_name, conf in model_configs.items():
 
     fp_type = conf['fp_type'] 
     con_desc_list = conf['con_desc_list']
+    stdrise = conf['standardise']
 
     # load data and calc descriptors
-    X, y = load_data('training_set.csv', fp_type, con_desc_list)
+    X, y = load_data('training_set.csv', fp_type, con_desc_list, stdrise)
 
     # train the model
     clf = MMVModel(fp_type=fp_type, con_desc_list=con_desc_list)
@@ -255,7 +256,7 @@ for model_name, conf in model_configs.items():
     coverage = calc_coverage('coverage_set.csv', fp_type, clf)
     
     # load eMolecules set and create classification report
-    X1, y1 = load_data('eMolecules.csv', fp_type, con_desc_list)
+    X1, y1 = load_data('eMolecules.csv', fp_type, con_desc_list, stdrise)
     preds = clf.predict(X1)
 
     pdf = pd.DataFrame(preds)
