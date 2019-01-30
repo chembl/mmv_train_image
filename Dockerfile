@@ -23,4 +23,4 @@ ENV PATH /opt/conda/envs/mmv_train/bin:$PATH
 
 # run the python script
 WORKDIR /model_train
-CMD python train_model.py
+CMD ["python","-u","train_model.py"]

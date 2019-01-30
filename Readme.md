@@ -36,11 +36,12 @@ In mac:
   ex: docker run -v /Users/efelix/projects/mmv_train_image/model_train:/model_train mmv_train
   ```
 
-The container will generate 4 files for each model:
+The container will generate 5 files for each model in model_train/outputs folder:
 
 - modelX.json: the dump of the model.
 - coverage_values_modelX.json: file with coverage values for each molecule in the coverage_set file.
 - predictions_modelX.csv: eMolecules dataset predictions.
-- report_modelX.json: classification metrics report using eMolecules predictions.
+- internal_validation_report_modelX.json: classification metrics with training data using a 5 k-fold cross-validation.
+- external_validation_report_modelX.json: classification metrics report with eMolecules predictions.
 
-Send the model and coverage files to the EBI.
+Send the required files to the EBI.

@@ -38,7 +38,17 @@
       "hba",
       "hbd"
     ],
-    "fp_type": "fcfp",
+    "fp_type": "ecfp",
+    "standardise": true
+  },
+  "model6": {
+    "con_desc_list": [
+      "alogp",
+      "n_h_atoms",
+      "hba",
+      "hbd"
+    ],
+    "fp_type": "ecfp",
     "standardise": true
   }
 }
