@@ -48,7 +48,7 @@
       "hba",
       "hbd"
     ],
-    "fp_type": "ecfp",
+    "fp_type": "fcfp",
     "standardise": true
   }
 }
