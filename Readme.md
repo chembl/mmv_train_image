@@ -5,12 +5,21 @@
 
   https://docs.docker.com/install/
 
-You may need to configure Docker to let it use all available system Memory if you're under Mac or Windows.
+You may need to configure Docker to let it use all available system memory if you're running this under Mac or Windows. 
 
-In mac:
+On Mac:
 
 <a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/mac1.png" width="300" ></a>
 <a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/mac2.png" width="300" ></a>
+
+
+On Windows:
+
+<a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/win1.png" width="300" ></a>
+<a><img src="https://github.com/chembl/mmv_train_image/blob/master/images/win2.png" width="300" ></a>
+
+
+Run the following commands to set the docker image up and train the model. Use a terminal in either Linux or Mac and Windows Power Shell on Windows.
 
 
 - Clone the repository, cd into the directory and build the docker image:
