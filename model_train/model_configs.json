@@ -2,12 +2,16 @@
   "model1": {
     "con_desc_list": [],
     "fp_type": "ecfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   },
   "model2": {
     "con_desc_list": [],
     "fp_type": "fcfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   },
   "model3": {
     "con_desc_list": [
@@ -18,7 +22,9 @@
       "hbd"
     ],
     "fp_type": "ecfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   },
   "model4": {
     "con_desc_list": [
@@ -29,7 +35,9 @@
       "hbd"
     ],
     "fp_type": "fcfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   },
   "model5": {
     "con_desc_list": [
@@ -39,7 +47,9 @@
       "hbd"
     ],
     "fp_type": "ecfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   },
   "model6": {
     "con_desc_list": [
@@ -49,6 +59,8 @@
       "hbd"
     ],
     "fp_type": "fcfp",
-    "standardise": true
+    "fp_radius": 3,
+    "standardise": true,
+    "cross_val_cores": 5
   }
 }

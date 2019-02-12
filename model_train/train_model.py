@@ -18,7 +18,7 @@ from rdkit import RDLogger
 lg = RDLogger.logger()
 lg.setLevel(RDLogger.CRITICAL)
 
-def calc_descriptors(row, fp_type, con_desc_list, stdrise=True, hashed=False):
+def calc_descriptors(row, fp_type, fp_radius, con_desc_list, stdrise=True, hashed=False):
     rdmol = Chem.MolFromSmiles(row['smiles'])
     if rdmol:
         if stdrise:
@@ -28,16 +28,16 @@ def calc_descriptors(row, fp_type, con_desc_list, stdrise=True, hashed=False):
                 return None, None, None, None, None, None, None
         if fp_type == 'ecfp':
             if hashed:
-                fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, 3, 2048, useFeatures=False)
+                fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, fp_radius, 2048, useFeatures=False)
                 fps = {key: 1 for key in fps.GetOnBits()}
             else:
-                fps = AllChem.GetMorganFingerprint(rdmol, 3, useFeatures=False).GetNonzeroElements()
+                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=False).GetNonzeroElements()
         else:
             if hashed:
-                fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, 3, 2048, useFeatures=True)
+                fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, fp_radius, 2048, useFeatures=True)
                 fps = {key: 1 for key in fps.GetOnBits()}
             else:
-                fps = AllChem.GetMorganFingerprint(rdmol, 3, useFeatures=True).GetNonzeroElements()
+                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=True).GetNonzeroElements()
         alogp = Descriptors.MolLogP(rdmol) if 'alogp' in con_desc_list else None
         mw = Descriptors.MolWt(rdmol) if 'mw' in con_desc_list else None
         n_h_atoms = Descriptors.HeavyAtomCount(rdmol) if 'n_h_atoms' in con_desc_list else None
@@ -49,9 +49,9 @@ def calc_descriptors(row, fp_type, con_desc_list, stdrise=True, hashed=False):
         return None, None, None, None, None, None, None
 
     
-def load_data(fname, fp_type, con_desc_list, stdrise=True):
+def load_data(fname, fp_type, fp_radius, con_desc_list, stdrise=True):
     df = pd.read_csv(fname)
-    df['fps'], df['alogp'], df['mw'], df['n_h_atoms'], df['rtb'], df['hbd'], df['hba'] = zip(*df.apply(lambda row: calc_descriptors(row, fp_type, con_desc_list, stdrise), axis=1))
+    df['fps'], df['alogp'], df['mw'], df['n_h_atoms'], df['rtb'], df['hbd'], df['hba'] = zip(*df.apply(lambda row: calc_descriptors(row, fp_type, fp_radius, con_desc_list, stdrise), axis=1))
     del df['smiles']
     df = df[con_desc_list + ['fps', 'active']]
     df = df.dropna()
@@ -66,8 +66,9 @@ class MMVModel(BaseEstimator):
     con_desc_list = []
     trained = False
     
-    def __init__(self, fp_type, con_desc_list):
+    def __init__(self, fp_type, fp_radius, con_desc_list):
         self.fp_type = fp_type
+        self.fp_radius = fp_radius
         self.con_desc_list = con_desc_list
     
     def _create_sparse_matrix(self, df, train=True):
@@ -168,6 +169,7 @@ class MMVModel(BaseEstimator):
     def to_json(self, out_fname):
         clf_dict = clf.clf.__dict__
         clf_dict['fp_type'] = self.fp_type
+        clf_dict['fp_radius'] = self.fp_radius
         clf_dict['con_desc_list'] = self.con_desc_list
         clf_dict['informative_cvb'] = self.informative_cvb
 
@@ -217,10 +219,11 @@ class MMVModel(BaseEstimator):
         self.trained = True
         self.con_desc_list = import_data['con_desc_list']
         self.fp_type = import_data['fp_type']
+        self.fp_radius = import_data['fp_radius']
         self.informative_cvb = import_data['informative_cvb']
 
 
-def calc_coverage(fname, fp_type, model):
+def calc_coverage(fname, fp_type, fp_radius, model):
     df = pd.read_csv(fname)
     fps_model = set(model.v_fps.vocabulary_.keys())
     coverage = []
@@ -230,9 +233,9 @@ def calc_coverage(fname, fp_type, model):
         except:
             continue
         if fp_type == 'ecfp':
-            fps = AllChem.GetMorganFingerprint(rdmol, 3, useFeatures=False).GetNonzeroElements()
+            fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=False).GetNonzeroElements()
         else:
-            fps = AllChem.GetMorganFingerprint(rdmol, 3, useFeatures=True).GetNonzeroElements()
+            fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=True).GetNonzeroElements()
         fps_molecule = set(fps.keys())
         m = len(fps_molecule - fps_model)
         coverage.append((len(fps_molecule) - m) / len(fps_molecule))
@@ -246,7 +249,7 @@ def get_classification_report(model, X, y):
     # save the predictions
     pdf = pd.DataFrame(preds)
     pdf.columns = ['pred']
-    pdf.to_csv('outputs/predictions_{}.csv'.format(model_name), index=False)
+    pdf.to_csv('outputs/eMolecules_predictions_{}.csv'.format(model_name), index=False)
     del pdf
 
     roc_auc = roc_auc_score(y, model.predict_proba(X)[:,1])
@@ -281,8 +284,10 @@ if __name__ == '__main__':
     for model_name, conf in model_configs.items():
 
         fp_type = conf['fp_type']
+        fp_radius = conf['fp_radius']
         con_desc_list = conf['con_desc_list']
         stdrise = conf['standardise']
+        n_jobs = conf['cross_val_cores']
 
         print()
         print(model_name)
@@ -291,7 +296,7 @@ if __name__ == '__main__':
         print()
 
         # load data and calc descriptors
-        X, y = load_data('training_set.csv', fp_type, con_desc_list, stdrise)
+        X, y = load_data('training_set.csv', fp_type, fp_radius, con_desc_list, stdrise)
 
         # ----------------------------------------------------------------------------------
         # internal validation report
@@ -302,15 +307,15 @@ if __name__ == '__main__':
                    'f1': 'f1',
                    'matthews_corrcoef': make_scorer(matthews_corrcoef)}
 
-        clf = MMVModel(fp_type=fp_type, con_desc_list=con_desc_list)
-        internal_report = cross_validate(clf, X, y, scoring=scoring, cv=KFold(n_splits=5, shuffle=True), n_jobs=5)
+        clf = MMVModel(fp_type=fp_type, fp_radius=fp_radius, con_desc_list=con_desc_list)
+        internal_report = cross_validate(clf, X, y, scoring=scoring, cv=KFold(n_splits=5, shuffle=True), n_jobs=n_jobs)
         json_tricks.dump(internal_report, open('outputs/internal_validation_report_{}.json'.format(model_name), 'w'), indent=2, sort_keys=True)
 
 
         # ----------------------------------------------------------------------------------
         # train the model with whole data
 
-        clf = MMVModel(fp_type=fp_type, con_desc_list=con_desc_list)
+        clf = MMVModel(fp_type=fp_type, fp_radius=fp_radius, con_desc_list=con_desc_list)
         clf.fit(X, y)
 
         print('Total unique {} features in the dataset: {}'.format(fp_type, clf._total_fp_features))
@@ -324,10 +329,10 @@ if __name__ == '__main__':
         clf.to_json('outputs/{}.json'.format(model_name))
 
         # calc coverage values for all molecules
-        coverage = calc_coverage('coverage_set.csv', fp_type, clf)
+        coverage = calc_coverage('coverage_set.csv', fp_type, fp_radius, clf)
 
         # load eMolecules set and create the external classification report
-        X1, y1 = load_data('eMolecules.csv', fp_type, con_desc_list, stdrise)
+        X1, y1 = load_data('eMolecules.csv', fp_type, fp_radius, con_desc_list, stdrise)
         external_report = get_classification_report(clf, X1, y1)
         json_tricks.dump(external_report, open('outputs/external_validation_report_{}.json'.format(model_name), 'w'), indent=2, sort_keys=True)
 
