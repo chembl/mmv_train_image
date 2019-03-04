@@ -4,14 +4,14 @@
     "fp_type": "ecfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   },
   "model2": {
     "con_desc_list": [],
     "fp_type": "fcfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   },
   "model3": {
     "con_desc_list": [
@@ -24,7 +24,7 @@
     "fp_type": "ecfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   },
   "model4": {
     "con_desc_list": [
@@ -37,7 +37,7 @@
     "fp_type": "fcfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   },
   "model5": {
     "con_desc_list": [
@@ -49,7 +49,7 @@
     "fp_type": "ecfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   },
   "model6": {
     "con_desc_list": [
@@ -61,6 +61,6 @@
     "fp_type": "fcfp",
     "fp_radius": 3,
     "standardise": true,
-    "cross_val_cores": 5
+    "cross_val_cores": 1
   }
 }

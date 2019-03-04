@@ -17,6 +17,10 @@ from rdkit import RDLogger
 
 lg = RDLogger.logger()
 lg.setLevel(RDLogger.CRITICAL)
+standardise.break_bonds.logger.setLevel(50)
+standardise.neutralise.logger.setLevel(50)
+standardise.unsalt.logger.setLevel(50)
+standardise.rules.logger.setLevel(50)
 
 def calc_descriptors(row, fp_type, fp_radius, con_desc_list, stdrise=True, hashed=False):
     rdmol = Chem.MolFromSmiles(row['smiles'])
