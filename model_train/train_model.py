@@ -333,7 +333,7 @@ if __name__ == '__main__':
         clf.to_json('outputs/{}.json'.format(model_name))
 
         # calc coverage values for all molecules
-        coverage = calc_coverage('coverage_set.csv', fp_type, fp_radius, clf)
+        coverage = calc_coverage('eMolecules.csv', fp_type, fp_radius, clf)
 
         # load eMolecules set and create the external classification report
         X1, y1 = load_data('eMolecules.csv', fp_type, fp_radius, con_desc_list, stdrise)

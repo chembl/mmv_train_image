@@ -42,7 +42,7 @@ Run the following commands to set the docker image up and train the model. Use a
   docker build -t mmv_train .
   ```
 
-- Training and coverage datasets have to be named training_set.csv and coverage_set.csv, respectively. These files must copied in model_train folder and formatted like [model_train/training_set_sample.csv](model_train/training_set_sample.csv) and [model_train/coverage_set_sample.csv](model_train/coverage_set_sample.csv), respecitvely
+- Training dataset have to be named training_set.csv. It must copied in model_train folder and formatted like [model_train/training_set_sample.csv].
 
 - Configure a model by editing the configuration file([model_train/model_configs.json](model_train/model_configs.json)) if needed. Available descriptors are:
 
