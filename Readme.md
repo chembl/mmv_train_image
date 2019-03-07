@@ -62,7 +62,7 @@ Run the following commands to set the docker image up and train the model. Use a
 The container will generate 5 files([description](model_train/output_files_description.md)) for each model in model_train/outputs folder:
 
 - modelX.json: the dump of the model.
-- coverage_values_modelX.json: json file with a list of coverage values for each molecule listed in the coverage_set file. Boxplots like the ones from the original publication will be generated with them.
+- coverage_values_modelX.json: json file with a list of coverage values for each molecule in eMolecules dataset. Boxplots like the ones from the original publication will be generated with them.
 - eMolecules_predictions_modelX.csv: eMolecules dataset predictions.
 - internal_validation_report_modelX.json: classification metrics with training data using a 5 k-fold cross-validation.
 - external_validation_report_modelX.json: classification metrics report with eMolecules predictions.
