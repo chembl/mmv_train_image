@@ -1,8 +1,8 @@
 FROM ubuntu:18.04
 
 # install required ubuntu packages
-RUN apt-get update --fix-missing
-RUN apt-get install -y libxrender1 libxext6 wget git
+RUN apt-get update --fix-missing && \
+    apt-get install -y libxrender1 libxext6 wget git
 
 # install miniconda
 RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh -O ~/miniconda.sh && \
