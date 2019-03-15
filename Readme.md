@@ -45,9 +45,9 @@ Run the following commands to set the docker image up and train the model. Use a
 - In case you experience any kind of difficulties building the image behind a proxy, you can skip the 'docker build' command and instead of it run:
 
 
-    ```
-    docker pull chemblgroup/mmv_train
-    ```
+   ```
+   docker pull chemblgroup/mmv_train
+   ```
 
 - Training dataset have to be named training_set.csv. It must copied in model_train folder and formatted like [https://github.com/chembl/mmv_train_image/blob/master/model_train/training_set_sample.csv].
 
