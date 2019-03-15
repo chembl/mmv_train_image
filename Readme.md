@@ -49,7 +49,7 @@ Run the following commands to set the docker image up and train the model. Use a
    docker pull chemblgroup/mmv_train
    ```
 
-- Training dataset have to be named training_set.csv. It must copied in model_train folder and formatted like [https://github.com/chembl/mmv_train_image/blob/master/model_train/training_set_sample.csv].
+- Training dataset have to be named training_set.csv. It must copied in model_train folder and formatted like [model_train/training_set_sample.csv](https://github.com/chembl/mmv_train_image/blob/master/model_train/training_set_sample.csv?raw=true).
 
 - Configure a model by editing the configuration file([model_train/model_configs.json](https://github.com/chembl/mmv_train_image/blob/master/model_train/model_configs.json)) if needed. Available descriptors are:
 
