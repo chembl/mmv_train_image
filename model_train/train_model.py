@@ -171,7 +171,7 @@ class MMVModel(BaseEstimator):
         return self.clf._joint_log_likelihood(sm)
     
     def to_json(self, out_fname):
-        clf_dict = clf.clf.__dict__
+        clf_dict = self.clf.__dict__
         clf_dict['fp_type'] = self.fp_type
         clf_dict['fp_radius'] = self.fp_radius
         clf_dict['con_desc_list'] = self.con_desc_list
@@ -214,6 +214,7 @@ class MMVModel(BaseEstimator):
             kbd.bin_edges_ = np.asarray([np.asarray(x) for x in binariser['bin_edges_']])
             encoder = OneHotEncoder()
             encoder.categories = binariser['categories']
+            encoder._legacy_mode = False
             kbd._encoder = encoder
             self.kbd = kbd
         except Exception as e:
