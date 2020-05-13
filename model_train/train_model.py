@@ -35,13 +35,14 @@ def calc_descriptors(row, fp_type, fp_radius, con_desc_list, stdrise=True, hashe
                 fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, fp_radius, 2048, useFeatures=False)
                 fps = {key: 1 for key in fps.GetOnBits()}
             else:
-                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=False).GetNonzeroElements()
+                # NB works better with binary features, removing FP feature freq (useCounts=False)
+                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=False, useCounts=False).GetNonzeroElements()
         else:
             if hashed:
                 fps = AllChem.GetMorganFingerprintAsBitVect(rdmol, fp_radius, 2048, useFeatures=True)
                 fps = {key: 1 for key in fps.GetOnBits()}
             else:
-                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=True).GetNonzeroElements()
+                fps = AllChem.GetMorganFingerprint(rdmol, fp_radius, useFeatures=True, useCounts=False).GetNonzeroElements()
         alogp = Descriptors.MolLogP(rdmol) if 'alogp' in con_desc_list else None
         mw = Descriptors.MolWt(rdmol) if 'mw' in con_desc_list else None
         n_h_atoms = Descriptors.HeavyAtomCount(rdmol) if 'n_h_atoms' in con_desc_list else None
@@ -99,8 +100,6 @@ class MMVModel(BaseEstimator):
             sm = sparse.hstack([fps, descs])
         else:
             sm = fps
-        # NB works better with binary features, removing FP feature freq (set all to 1)
-        sm.data = np.ones(sm.data.shape[0], dtype=np.int8)
         return sm.tocsc()
     
     def _get_too_few(self, sm):
